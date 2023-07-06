@@ -61,7 +61,7 @@ public class DbHelper extends SQLiteOpenHelper {
         if(cursor.getCount() > 0){
             while(cursor.moveToNext()){
                 int id = cursor.getInt(0);
-                String nama = cursor.getString(1);
+                String nama = id + ". " + cursor.getString(1);
                 String nim = cursor.getString(2);
                 String noHp = cursor.getString(3);
 
@@ -71,6 +71,33 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         return mhslist;
+    }
+
+    public boolean hapus(int id){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowAffected = db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+
+        if(rowAffected > 0)
+            return true;
+        else
+            return false;
+
+    }
+
+    public boolean ubah(MhsModel mm){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_NAMA, mm.getNama());
+        cv.put(COLUMN_NIM, mm.getNim());
+        cv.put(COLUMN_NO_HP, mm.getNoHp());
+        int rowAffected = db.update(TABLE_NAME, cv, "id = ?", new String[]{String.valueOf(mm.getId())});
+
+        if(rowAffected > 0)
+            return true;
+        else
+            return false;
     }
 
 
